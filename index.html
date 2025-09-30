@@ -1,0 +1,422 @@
+<!doctype html>
+
+<html lang="en">
+	
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+  <title>Open Directory Finder - Search Public Files & Directories</title>
+  
+  <!-- SEO Meta Tags --> 
+   <meta name="description" content="Search publicly indexed files easily by category and engine. TV, Movies, Music, Books, Software, Images and more."/>
+  <meta name="keywords" content="open directory finder, index of, movie search, ebook search, mp3 search, iso download, direct links" />
+  <meta name="author" content="Open Directory Finder" />
+  <meta name="github-repo" content="https://github.com/expde/OpenDirectoryFinder" /> 
+  
+   <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="Open Directory Finder" />
+  <meta property="og:description" content="Search publicly indexed files easily by category and engine." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://expde.github.io/OpenDirectoryFinder" />
+  <meta property="og:image" content="https://expde.github.io/OpenDirectoryFinder/preview.png" />
+  
+  <!-- Twitter --> 
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Open Directory Finder" />
+  <meta name="twitter:description" content="Search publicly indexed files easily by category and engine." />
+  <meta name="twitter:image" content="https://expde.github.io/OpenDirectoryFinder/preview.png" />
+  
+  <!-- Mobile Theme Color --> 
+  <meta name="theme-color" content="#4f46e5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
+  
+  <!-- PWA Support -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Directory Finder" />
+  
+  <!-- Performance -->
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+  <link rel="preconnect" href="https://unpkg.com" /> 
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            dark: {
+              50: '#f8f9fa',
+              100: '#f1f3f4',
+              200: '#e8eaed',
+              300: '#dadce0',
+              400: '#bdc1c6',
+              500: '#9aa0a6',
+              600: '#80868b',
+              700: '#5f6368',
+              800: '#3c4043',
+              900: '#202124',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script> 
+  <style>
+    * { transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+    body { transition: background-color .3s, color .3s; }
+    .card-shadow { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    .dark .card-shadow { box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+    .dark-toggle { transition: all 0.3s ease; }
+    .dark-toggle:hover { transform: scale(1.05); }
+    .search-btn { transition: all 0.2s ease; }
+    .search-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4); }
+    .keyword-btn { transition: all 0.2s ease; }
+    .keyword-btn:hover { transform: translateY(-1px); }
+    .fade-in { animation: fadeIn 0.5s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-spin { animation: spin 1s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    .search-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+    .search-btn:disabled:hover { transform: none; }
+    
+    /* Modern dark mode styles - softer colors */
+    .dark {
+      color-scheme: dark;
+    }
+    .dark body {
+      background-color: #0f172a !important; /* Slate 900 - softer than pure black */
+      color: #e2e8f0 !important; /* Slate 200 - warmer white */
+    }
+    .dark .bg-white {
+      background-color: #1e293b !important; /* Slate 800 - softer card background */
+    }
+    .dark .text-gray-900 {
+      color: #f1f5f9 !important; /* Slate 100 - softer text */
+    }
+    .dark .text-gray-600 {
+      color: #cbd5e1 !important; /* Slate 300 - better contrast */
+    }
+    .dark .text-gray-500 {
+      color: #94a3b8 !important; /* Slate 400 - softer secondary text */
+    }
+    .dark .text-gray-400 {
+      color: #64748b !important; /* Slate 500 - muted text */
+    }
+    .dark .border-gray-200 {
+      border-color: #334155 !important; /* Slate 700 - softer borders */
+    }
+    .dark .border-gray-300 {
+      border-color: #475569 !important; /* Slate 600 - better border visibility */
+    }
+    .dark .border-gray-700 {
+      border-color: #334155 !important; /* Slate 700 - consistent borders */
+    }
+    .dark .bg-gray-100 {
+      background-color: #334155 !important; /* Slate 700 - keyword buttons */
+    }
+    .dark .bg-gray-700 {
+      background-color: #334155 !important; /* Slate 700 - consistent backgrounds */
+    }
+    .dark .hover\:bg-indigo-100:hover {
+      background-color: #1e40af !important; /* Indigo 800 - dark mode hover */
+    }
+    .dark .hover\:bg-indigo-900\/30:hover {
+      background-color: #312e81 !important; /* Indigo 900 with opacity */
+    }
+    .dark .hover\:text-indigo-700:hover {
+      color: #60a5fa !important; /* Indigo 400 - better contrast */
+    }
+    .dark .hover\:text-indigo-300:hover {
+      color: #60a5fa !important; /* Indigo 400 - consistent hover text */
+    }
+  </style>
+  </head>
+  
+  <body class="bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-slate-200 min-h-screen">
+  <div class="max-w-4xl mx-auto p-4 min-h-screen flex flex-col">
+  	
+  <!-- header -->
+  <header class="flex items-center justify-between mb-8 fade-in">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+        <i data-lucide="search" class="w-6 h-6 text-white"></i>
+      </div>
+      <h1 class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Open Directory Finder</h1>
+    </div>
+    <button id="darkToggle" class="dark-toggle p-3 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:shadow-lg">
+      <i id="iconSun" data-lucide="sun" class="w-5 h-5 text-yellow-500"></i>
+      <i id="iconMoon" data-lucide="moon" class="w-5 h-5 text-blue-400 hidden"></i>
+    </button>
+  </header>
+
+<!-- search card -->
+<section class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl card-shadow p-6 fade-in flex-1">
+  <div class="flex flex-col lg:flex-row gap-4">
+    <!-- category select -->
+    <div class="flex items-center gap-3 flex-1">
+      <div class="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/20">
+        <i id="catIcon" data-lucide="film" class="w-5 h-5 text-indigo-600 dark:text-indigo-400"></i>
+      </div>
+      <select id="category" class="flex-1 px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-700 font-medium focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+        <option value="tv" data-icon="film">🎬 TV/Movies/Video</option>
+        <option value="books" data-icon="book">📚 Books</option>
+        <option value="music" data-icon="music">🎵 Music</option>
+        <option value="software" data-icon="hard-drive">💾 Software/ISO/DMG/Games</option>
+        <option value="images" data-icon="image">🖼️ Images</option>
+        <option value="other" data-icon="asterisk">📁 Other</option>
+      </select>
+    </div>
+
+    <!-- engine select -->
+    <div class="flex items-center gap-3 flex-1">
+      <div class="p-2 rounded-lg bg-green-50 dark:bg-green-900/20">
+        <i data-lucide="search" class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+      </div>
+      <select id="engine" class="flex-1 px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-700 font-medium focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+        <option value="google">🔍 Google</option>
+        <option value="startpage">🔒 Startpage</option>
+        <option value="searx">🔎 Searx</option>
+        <option value="filepursuit">📂 FilePursuit</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- search input -->
+  <div class="flex mt-4 gap-3">
+    <div class="flex-1 relative">
+      <input id="term" type="search" placeholder="Enter your search term..." class="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" />
+    </div>
+    <button id="searchBtn" class="search-btn px-6 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium flex items-center justify-center gap-2 shadow-lg">
+      <i data-lucide="search" class="w-5 h-5"></i>
+      <span class="hidden sm:inline">Search</span>
+    </button>
+  </div>
+
+  <!-- top keywords -->
+  <div class="mt-6">
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3 font-medium">Popular keywords:</p>
+    <div class="flex flex-wrap gap-2">
+      <button class="keyword-btn kw px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-sm font-medium hover:bg-indigo-100 dark:hover:bg-indigo-900/30 hover:text-indigo-700 dark:hover:text-indigo-300">1080p</button>
+      <button class="keyword-btn kw px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-sm font-medium hover:bg-indigo-100 dark:hover:bg-indigo-900/30 hover:text-indigo-700 dark:hover:text-indigo-300">720p</button>
+      <button class="keyword-btn kw px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-sm font-medium hover:bg-indigo-100 dark:hover:bg-indigo-900/30 hover:text-indigo-700 dark:hover:text-indigo-300">Bluray</button>
+      <button class="keyword-btn kw px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-sm font-medium hover:bg-indigo-100 dark:hover:bg-indigo-900/30 hover:text-indigo-700 dark:hover:text-indigo-300">WeB-DL</button>
+      <button class="keyword-btn kw px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-sm font-medium hover:bg-indigo-100 dark:hover:bg-indigo-900/30 hover:text-indigo-700 dark:hover:text-indigo-300">mp4</button>
+      <button class="keyword-btn kw px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-sm font-medium hover:bg-indigo-100 dark:hover:bg-indigo-900/30 hover:text-indigo-700 dark:hover:text-indigo-300">mkv</button>
+      <button class="keyword-btn kw px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-sm font-medium hover:bg-indigo-100 dark:hover:bg-indigo-900/30 hover:text-indigo-700 dark:hover:text-indigo-300">pdf</button>
+    </div>
+  </div>
+</section>
+
+<!-- footer -->
+<footer class="mt-auto text-center fade-in" style="margin-top: 50px;">
+  <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl card-shadow p-6">
+    <div class="flex items-center justify-center gap-2 mb-3">
+      <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+        <i data-lucide="shield" class="w-4 h-4 text-white"></i>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Responsible Usage</h3>
+    </div>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+      This tool only builds search queries to send to external search engines. 
+      Please use responsibly and respect copyright laws.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4 text-xs text-gray-500 dark:text-gray-500 mb-4">
+      <span>🔍 Search Engine Integration</span>
+      <span>•</span>
+      <span>📁 Open Directory Discovery</span>
+      <span>•</span>
+      <span>⚡ Fast & Efficient</span>
+    </div>
+    
+    <!-- GitHub Credits -->
+    <div class="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 text-xs text-gray-500 dark:text-gray-500">
+        <div class="flex items-center gap-2">
+          <i data-lucide="github" class="w-4 h-4"></i>
+          <span>Open Source on</span>
+          <a href="https://github.com/expde/OpenDirectoryFinder" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
+            GitHub
+          </a>
+        </div>
+        <div class="flex items-center gap-2">
+          <i data-lucide="star" class="w-4 h-4"></i>
+          <span>Made with ❤️ by</span>
+          <a href="https://github.com/expde" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
+            @expde
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  </div> 
+
+<script>
+    // Initialize app immediately since script is at bottom of body
+    console.log('Initializing app...');
+    
+    function initializeApp() {
+      console.log('App initialization started...');
+      
+      const TEMPLATES = {
+      tv: 'intitle:index.of +(mkv|mp4|avi|mov|mpg|wmv|divx|mpeg) -inurl:(jsp|pl|php|html|aspx|htm|cf|shtml)',
+      books: 'intitle:index.of +(pdf|epub|mobi) -inurl:(jsp|pl|php|html)',
+      music: 'intitle:index.of +mp3 -inurl:(jsp|pl|php|html)',
+      software: 'intitle:index.of +(iso|dmg|exe|zip|rar) -inurl:(jsp|pl|php|html)',
+      images: 'intitle:index.of +(jpg|png|jpeg|gif) -inurl:(jsp|pl|php|html)',
+      other: 'intitle:index.of'
+    };
+
+    const ENGINES = {
+      google: 'https://www.google.com/search?q=',
+      startpage: 'https://www.startpage.com/sp/search?q=',
+      searx: 'https://searx.org/search?q=',
+      filepursuit: 'https://filepursuit.io/search?q='
+    };
+
+    const catSel = document.getElementById('category');
+    const catIcon = document.getElementById('catIcon');
+    const engineSel = document.getElementById('engine');
+    const termInput = document.getElementById('term');
+    const btn = document.getElementById('searchBtn');
+
+    // update icon on category change
+    catSel.addEventListener('change', () => {
+      const icon = catSel.selectedOptions[0].getAttribute('data-icon');
+      catIcon.setAttribute('data-lucide', icon);
+      lucide.createIcons();
+    });
+
+    // Search functionality with loading state
+    btn.addEventListener('click', () => {
+      const term = termInput.value.trim();
+      if (!term) {
+        termInput.focus();
+        termInput.style.borderColor = '#ef4444';
+        setTimeout(() => {
+          termInput.style.borderColor = '';
+        }, 2000);
+        return;
+      }
+      
+      // Add loading state
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Searching...';
+      btn.disabled = true;
+      
+      const query = (term ? term + ' ' : '') + (TEMPLATES[catSel.value] || TEMPLATES.other);
+      const base = ENGINES[engineSel.value] || ENGINES.google;
+      
+      // Small delay for better UX
+      setTimeout(() => {
+        window.location.href = base + encodeURIComponent(query);
+      }, 300);
+    });
+    
+    // Enter key support
+    termInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        btn.click();
+      }
+    });
+
+    document.querySelectorAll('.kw').forEach(k => {
+      k.addEventListener('click', () => {
+        const val = termInput.value.trim();
+        termInput.value = val ? val + ' ' + k.textContent : k.textContent;
+      });
+    });
+
+    // Initialize icons first
+    lucide.createIcons();
+
+    // Dark mode functionality
+    const darkToggle = document.getElementById('darkToggle');
+    const iconSun = document.getElementById('iconSun');
+    const iconMoon = document.getElementById('iconMoon');
+    
+    // Check system preference and localStorage
+    function getInitialTheme() {
+      const saved = localStorage.getItem('odf_dark');
+      if (saved !== null) {
+        return saved === '1';
+      }
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    
+    function setDarkMode(isDark) {
+      console.log('Setting dark mode to:', isDark);
+      try {
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+          document.body.classList.add('dark');
+          if (iconSun) {
+            iconSun.classList.add('hidden');
+            console.log('Sun icon hidden');
+          }
+          if (iconMoon) {
+            iconMoon.classList.remove('hidden');
+            console.log('Moon icon shown');
+          }
+          localStorage.setItem('odf_dark', '1');
+          console.log('Dark mode enabled - HTML classes:', document.documentElement.className);
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.body.classList.remove('dark');
+          if (iconMoon) {
+            iconMoon.classList.add('hidden');
+            console.log('Moon icon hidden');
+          }
+          if (iconSun) {
+            iconSun.classList.remove('hidden');
+            console.log('Sun icon shown');
+          }
+          localStorage.setItem('odf_dark', '0');
+          console.log('Light mode enabled - HTML classes:', document.documentElement.className);
+        }
+        console.log('Dark mode set successfully');
+      } catch (error) {
+        console.error('Error setting dark mode:', error);
+      }
+    }
+    
+    // Initialize theme
+    const initialTheme = getInitialTheme();
+    setDarkMode(initialTheme);
+    
+    // Toggle functionality
+    if (darkToggle) {
+      console.log('Dark toggle button found, adding event listener...');
+      darkToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Dark toggle clicked!');
+        const isCurrentlyDark = document.documentElement.classList.contains('dark');
+        console.log('Currently dark:', isCurrentlyDark);
+        setDarkMode(!isCurrentlyDark);
+        console.log('Dark mode toggled to:', !isCurrentlyDark);
+      });
+    } else {
+      console.error('Dark toggle button not found!');
+    }
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (localStorage.getItem('odf_dark') === null) {
+        setDarkMode(e.matches);
+      }
+    });
+    
+    } // End of initializeApp function
+    
+    // Call the function immediately
+    initializeApp();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+# GitHub Pages Configuration
+title: Open Directory Finder
+description: Search publicly indexed files easily by category and engine
+author: expde
+baseurl: "/OpenDirectoryFinder"
+url: "https://expde.github.io"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Exclude from processing
+exclude:
+  - README.md
+  - LICENSE
+  - .gitignore
+  - _config.yml
